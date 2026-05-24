@@ -23,13 +23,11 @@ public class CursoController {
     @Autowired
     private CursoService cursoService;
     
-    // GET /api/cursos - Listar todos los cursos
     @GetMapping("/cursos")
     public ResponseEntity<List<Curso>> listarCursos() {
         return ResponseEntity.ok(cursoService.listarCursos());
     }
     
-    // POST /api/cursos - Agregar nuevo curso
     @PostMapping("/cursos")
     public ResponseEntity<Map<String, Object>> agregarCurso(@RequestBody Curso curso) {
         Curso nuevoCurso = cursoService.agregarCurso(curso);
