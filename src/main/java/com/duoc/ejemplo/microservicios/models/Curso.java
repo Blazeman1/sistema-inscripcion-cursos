@@ -1,6 +1,11 @@
 package com.duoc.ejemplo.microservicios.models;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,6 +13,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import main.java.com.duoc.ejemplo.microservicios.models.InscripcionRequest;
 
 @Entity
 @Table(name = "cursos")
@@ -53,4 +59,32 @@ public class Curso {
     
     public BigDecimal getCosto() { return costo; }
     public void setCosto(BigDecimal costo) { this.costo = costo; }
+
+    // POST /api/inscripciones - Inscribir estudiante a cursos
+    @PostMapping("/inscripciones")
+    public ResponseEntity<Map<String, Object>> inscribirCursos(@RequestBody InscripcionRequest request) {
+    try {
+        List<Curso> cursosSeleccionados = new ArrayList<>();
+        BigDecimal total = BigDecimal.ZERO;
+        
+        for (Long id : request.getCursosIds()) {
+            Curso curso = cursoService.obtenerCursoPorId(id);
+            cursosSeleccionados.add(curso);
+            total = total.add(curso.getCosto());
+        }
+        
+        Map<String, Object> response = new HashMap<>();
+        response.put("mensaje", "Inscripción exitosa");
+        response.put("estudiante", request.getEmail());
+        response.put("cursos", cursosSeleccionados);
+        response.put("totalPagar", total);
+        response.put("fecha", LocalDateTime.now().toString());
+        
+        return ResponseEntity.ok(response);
+    } catch (RuntimeException e) {
+        Map<String, Object> error = new HashMap<>();
+        error.put("error", e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+}
 }

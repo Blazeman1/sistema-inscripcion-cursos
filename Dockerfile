@@ -1,17 +1,14 @@
-FROM eclipse-temurin:22-jdk AS buildstage 
-
-RUN apt-get update && apt-get install -y maven
-
+# Etapa 1: Construcción
+FROM maven:3.9.9-eclipse-temurin-22 AS buildstage
 WORKDIR /app
-
 COPY pom.xml .
-COPY src /app/src
-RUN mvn clean package
+RUN mvn dependency:go-offline -B
+COPY src ./src
+RUN mvn clean package -DskipTests
 
+# Etapa 2: Ejecución
 FROM eclipse-temurin:22-jdk
-
-COPY --from=buildstage /app/target/microservicio-1.0.0.jar /app/app.jar
-
+WORKDIR /app
+COPY --from=buildstage /app/target/*.jar /app/app.jar
 EXPOSE 8080
-
-CMD ["java", "-jar", "/app/app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
