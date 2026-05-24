@@ -1,12 +1,10 @@
 package com.duoc.ejemplo.microservicios.services;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.duoc.ejemplo.microservicios.models.Curso;
 import com.duoc.ejemplo.microservicios.repositories.CursoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.util.List;
 
 @Service
 public class CursoService {
