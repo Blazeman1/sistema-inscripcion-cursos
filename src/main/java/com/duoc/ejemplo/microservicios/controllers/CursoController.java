@@ -17,13 +17,13 @@ public class CursoController {
     @Autowired
     private CursoService cursoService;
     
-    // GET /api/cursos - Listar todos los cursos
+    // GET /api/cursos
     @GetMapping("/cursos")
     public ResponseEntity<List<Curso>> listarCursos() {
         return ResponseEntity.ok(cursoService.listarCursos());
     }
     
-    // POST /api/cursos - Agregar nuevo curso
+    // POST /api/cursos
     @PostMapping("/cursos")
     public ResponseEntity<Map<String, Object>> agregarCurso(@RequestBody Curso curso) {
         Curso nuevoCurso = cursoService.agregarCurso(curso);
@@ -33,7 +33,7 @@ public class CursoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
     
-    // POST /api/inscripciones - Inscribir a cursos
+    // POST /api/inscripciones
     @PostMapping("/inscripciones")
     public ResponseEntity<Map<String, Object>> inscribir(@RequestBody Map<String, Object> request) {
         String email = (String) request.get("email");
