@@ -1,4 +1,4 @@
-name: CI/CD Pipeline - Sistema Inscripción
+name: CI/CD Pipeline
 
 on:
   push:
@@ -43,4 +43,4 @@ jobs:
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/sistema-inscripcion:latest
             docker stop inscripcion-app || true
             docker rm inscripcion-app || true
-            docker run -d --name inscripcion-app -p 8080:8080 ${{ secrets.DOCKERHUB_USERNAME }}/sistema-inscripcion:latest
+            docker run -d --name inscripcion-app -p 8080:8080 --restart unless-stopped ${{ secrets.DOCKERHUB_USERNAME }}/sistema-inscripcion:latest
